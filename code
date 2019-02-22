@@ -1,0 +1,49 @@
+#include <kipr/botball.h>
+#define TRUE 0
+#define FALSE 1
+
+int waitForLine();
+int leftMotor = 1, rightMotor = 0, lSensor = 1, rSensor = 0, white = 2000, black = 3000, numberOfTimes = 0;
+//White is less than 2000, black is more than 3000, and gray is in between
+
+int main()
+{
+   enable_servos();
+   set_servo_position(0, 2048);
+   msleep(100); //Time to wait for servo to get in position
+   while (waitForLine(lSensor) == FALSE) {
+       motor(leftMotor, 80);
+       motor(rightMotor, 78);
+   }
+   	motor(leftMotor, 0);
+    motor(rightMotor, 0);
+    motor(leftMotor, 25);
+    msleep(500);
+    motor(leftMotor, 0);
+    motor(leftMotor, 50);
+    motor(rightMotor, 50);
+    msleep(200);
+    motor(leftMotor, 0);
+    motor(rightMotor, 0);
+    while (numberOfTimes <= 5) {
+        set_servo_position(0, 1024);
+        motor(rightMotor, 50);
+        msleep(200);
+        motor(rightMotor, 0);
+        set_servo_position(0, 2048);
+        set_servo_position(1, 1024);
+        motor(rightMotor, -50);
+        msleep(200);
+        motor(rightMotor, 0);
+    }
+    return 0;
+}
+
+int waitForLine(int sensor) {
+    if (analog(sensor) < white) {
+        return FALSE;
+    }
+    else {
+        return TRUE;
+    }
+}
